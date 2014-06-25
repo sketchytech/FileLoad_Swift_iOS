@@ -17,4 +17,4 @@ Simple file load for iOS coded in Swift.
     FileLoad.loadStringFromCachesDirectory("YourFile.extension", subdirectory:"YourSubDirectory")
     FileLoad.loadStringFromApplicationSupportDirectory("YourFile.extension", subdirectory:"YourSubDirectory")
   
-See also [FileLoad](https://github.com/sketchytech/FileSave) and [FileDelete](https://github.com/sketchytech/FileDelete)
+See also [FileSave](https://github.com/sketchytech/FileSave) and [FileDelete](https://github.com/sketchytech/FileDelete)
