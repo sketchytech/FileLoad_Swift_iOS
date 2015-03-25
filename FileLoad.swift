@@ -2,403 +2,206 @@
 //  FileLoad.swift
 //
 //  Created by Anthony Levings on 25/06/2014.
-//  Copyright (c) 2014 Gylphi. All rights reserved.
+
 //
 
 import Foundation
 
-class FileLoad {
+struct FileLoad {
     
-    class func loadDataFromDocumentsDirectory(path:String, subdirectory:String?) -> NSData
+    static func loadData(path:String, directory:NSSearchPathDirectory, subdirectory:String?) -> NSData?
     {
         // Remove unnecessary slash if need
-        var newPath = self.stripSlashIfNeeded(path)
-        var newSubdirectory:String?
-        if subdirectory {
-            newSubdirectory = self.stripSlashIfNeeded(subdirectory!)
+        let newPath = stripSlashIfNeeded(path)
+        var subDir:String?
+        if let sub = subdirectory {
+            subDir = stripSlashIfNeeded(sub)
         }
-        // Create generic beginning to file save path
-        var loadPath = self.applicationDocumentsDirectory().path+"/"
         
-        if newSubdirectory {
-            loadPath += newSubdirectory!
-            self.createSubDirectory(loadPath)
+        // Create generic beginning to file load path
+        var loadPath = ""
+        
+        if let direct = applicationDirectory(directory),
+            path = direct.path {
+                loadPath = path + "/"
+        }
+        
+        if let sub = subDir {
+            loadPath += sub
             loadPath += "/"
         }
+        
         
         // Add requested save path
         loadPath += newPath
         
-        println(loadPath)
         // Save the file and see if it was successful
-        var data:NSData = NSFileManager.defaultManager().contentsAtPath(loadPath)
+        let data = NSFileManager.defaultManager().contentsAtPath(loadPath)
         
         // Return status of file save
         return data
-        
-    }
-    
-    
-    class func loadDataFromLibraryDirectory(path:String, subdirectory:String?) -> NSData
-    {
-        
-        // Remove unnecessary slash if need
-        var newPath = self.stripSlashIfNeeded(path)
-        var newSubdirectory:String?
-        if subdirectory {
-            newSubdirectory = self.stripSlashIfNeeded(subdirectory!)
-        }
-        
-        // Create generic beginning to file save path
-        var loadPath = self.applicationLibraryDirectory().path+"/"
-        
-        if newSubdirectory {
-            loadPath += newSubdirectory!
-            self.createSubDirectory(loadPath)
-            loadPath += "/"
-        }
-        
-        // Add requested save path
-        loadPath += newPath
-        
-        println(loadPath)
-        // Save the file and see if it was successful
-        var data:NSData = NSFileManager.defaultManager().contentsAtPath(loadPath)
-        
-        // Return status of file save
-        return data
-    }
-    
-    class func loadDataFromTemporaryDirectory(path:String, subdirectory:String?) -> NSData
-    {
-        
-        // Remove unnecessary slash if need
-        var newPath = self.stripSlashIfNeeded(path)
-        var newSubdirectory:String?
-        if subdirectory {
-            newSubdirectory = self.stripSlashIfNeeded(subdirectory!)
-        }
-        
-        // Create generic beginning to file save path
-        var loadPath = self.applicationTemporaryDirectory().path+"/"
-        
-        if newSubdirectory {
-            loadPath += newSubdirectory!
-            self.createSubDirectory(loadPath)
-            loadPath += "/"
-        }
-        
-        // Add requested save path
-        loadPath += newPath
-        
-        println(loadPath)
-        // Save the file and see if it was successful
-        var data:NSData = NSFileManager.defaultManager().contentsAtPath(loadPath)
-        
-        // Return status of file save
-        return data
-    }
-    
-    class func loadDataFromCachesDirectory(path:String, subdirectory:String?) -> NSData
-    {
-        
-        
-        // Remove unnecessary slash if need
-        var newPath = self.stripSlashIfNeeded(path)
-        var newSubdirectory:String?
-        if subdirectory {
-            newSubdirectory = self.stripSlashIfNeeded(subdirectory!)
-        }
-        
-        // Create generic beginning to file save path
-        var loadPath = self.applicationCachesDirectory().path+"/"
-        
-        if newSubdirectory {
-            loadPath += newSubdirectory!
-            self.createSubDirectory(loadPath)
-            loadPath += "/"
-        }
-        
-        // Add requested save path
-        loadPath += newPath
-        
-        println(loadPath)
-        // Save the file and see if it was successful
-        var data:NSData = NSFileManager.defaultManager().contentsAtPath(loadPath)
-        
-        // Return status of file save
-        return data
-    }
-    
-    class func loadDataFromApplicationSupportDirectory(path:String, subdirectory:String?) -> NSData
-    {
-        
-        // Remove unnecessary slash if need
-        var newPath = self.stripSlashIfNeeded(path)
-        var newSubdirectory:String?
-        if subdirectory {
-            newSubdirectory = self.stripSlashIfNeeded(subdirectory!)
-        }
-        
-        // Create generic beginning to file save path
-        var loadPath = self.applicationSupportDirectory().path+"/"
-        
-        if newSubdirectory {
-            loadPath += newSubdirectory!
-            self.createSubDirectory(loadPath)
-            loadPath += "/"
-        }
-        
-        // Add requested save path
-        loadPath += newPath
-        
-        println(loadPath)
-        // Save the file and see if it was successful
-        var data:NSData = NSFileManager.defaultManager().contentsAtPath(loadPath)
-        
-        // Return status of file save
-        return data
-    }
-    
-    // string methods
-    
-    class func loadStringFromDocumentsDirectory(path:String, subdirectory:String?) -> String
-    {
-        // Remove unnecessary slash if need
-        var newPath = self.stripSlashIfNeeded(path)
-        var newSubdirectory:String?
-        if subdirectory {
-            newSubdirectory = self.stripSlashIfNeeded(subdirectory!)
-        }
-        // Create generic beginning to file save path
-        var loadPath = self.applicationDocumentsDirectory().path+"/"
-        
-        if newSubdirectory {
-            loadPath += newSubdirectory!
-            self.createSubDirectory(loadPath)
-            loadPath += "/"
-        }
-        
-        // Add requested save path
-        loadPath += newPath
-        var error:NSError?
-        println(loadPath)
-        // Save the file and see if it was successful
-        var text:String? = String.stringWithContentsOfFile(loadPath, encoding:NSUTF8StringEncoding, error: &error)
-        
-        // Return status of file save
-        if !text {
-            text = ""
-        }
-        return text!
         
     }
 
-    class func loadStringFromLibraryDirectory(path:String, subdirectory:String) -> String {
+    
+    static func loadDataFromTemporaryDirectory(path:String, subdirectory:String?) -> NSData?
+    {
+        // Remove unnecessary slash if need
+        let newPath = stripSlashIfNeeded(path)
+        var subDir:String?
+        if let sub = subdirectory {
+            subDir = stripSlashIfNeeded(sub)
+        }
         
-        var newPath = self.stripSlashIfNeeded(path)
-        var newSubdirectory:String? = self.stripSlashIfNeeded(subdirectory)
+        // Create generic beginning to file load path
+        var loadPath = ""
         
-        // Create generic beginning to file save path
-        var loadPath = self.applicationLibraryDirectory().path+"/"
+        if let direct = self.applicationTemporaryDirectory(),
+            path = direct.path {
+                loadPath = path + "/"
+        }
         
-        if newSubdirectory {
-            loadPath += newSubdirectory!
-            self.createSubDirectory(loadPath)
+        if let sub = subDir {
+            loadPath += sub
             loadPath += "/"
         }
         
+        
         // Add requested save path
         loadPath += newPath
-        var error:NSError?
+        
         println(loadPath)
         // Save the file and see if it was successful
-        var text:String? = String.stringWithContentsOfFile(loadPath, encoding:NSUTF8StringEncoding, error: &error)
+        let data = NSFileManager.defaultManager().contentsAtPath(loadPath)
         
         // Return status of file save
-        if !text {
-            text = ""
-        }
-        return text!
+        return data
+        
+       
     }
-    class func loadStringFromTemporaryDirectory(path:String, subdirectory:String) -> String {
+    
+   
+    
+    // string methods
+    
+    static func loadString(path:String, directory:NSSearchPathDirectory, subdirectory:String?, encoding:NSStringEncoding = NSUTF8StringEncoding) -> String?
+    {
+        // Remove unnecessary slash if need
+        let newPath = stripSlashIfNeeded(path)
+        var subDir:String?
+        if let sub = subdirectory {
+            subDir = stripSlashIfNeeded(sub)
+        }
         
-        var newPath = self.stripSlashIfNeeded(path)
-        var newSubdirectory:String? = self.stripSlashIfNeeded(subdirectory)
+        // Create generic beginning to file load path
+        var loadPath = ""
         
-        // Create generic beginning to file save path
-        var loadPath = self.applicationTemporaryDirectory().path+"/"
+        if let direct = applicationDirectory(directory),
+            path = direct.path {
+                loadPath = path + "/"
+        }
         
-        if newSubdirectory {
-            loadPath += newSubdirectory!
-            self.createSubDirectory(loadPath)
+        if let sub = subDir {
+            loadPath += sub
             loadPath += "/"
         }
         
+        
         // Add requested save path
         loadPath += newPath
+
         var error:NSError?
         println(loadPath)
         // Save the file and see if it was successful
-        var text:String? = String.stringWithContentsOfFile(loadPath, encoding:NSUTF8StringEncoding, error: &error)
+        var text:String? = String(contentsOfFile:loadPath, encoding:encoding, error: &error)
         
-        // Return status of file save
-        if !text {
-            text = ""
-        }
-        return text!
+        
+        return text
         
     }
     
-    class func loadStringFromCachesDirectory(path:String, subdirectory:String) -> String {
+   
+    static func loadStringFromTemporaryDirectory(path:String, subdirectory:String?, encoding:NSStringEncoding = NSUTF8StringEncoding) -> String? {
         
-        var newPath = self.stripSlashIfNeeded(path)
-        var newSubdirectory:String? = self.stripSlashIfNeeded(subdirectory)
+        // Remove unnecessary slash if need
+        let newPath = stripSlashIfNeeded(path)
+        var subDir:String?
+        if let sub = subdirectory {
+            subDir = stripSlashIfNeeded(sub)
+        }
         
-        // Create generic beginning to file save path
-        var loadPath = self.applicationCachesDirectory().path+"/"
+        // Create generic beginning to file load path
+        var loadPath = ""
         
-        if newSubdirectory {
-            loadPath += newSubdirectory!
-            self.createSubDirectory(loadPath)
+        if let direct = self.applicationTemporaryDirectory(),
+            path = direct.path {
+                loadPath = path + "/"
+        }
+        
+        if let sub = subDir {
+            loadPath += sub
             loadPath += "/"
         }
         
-        // Add requested save path
-        loadPath += newPath
-        var error:NSError?
-        println(loadPath)
-        // Save the file and see if it was successful
-        var text:String? = String.stringWithContentsOfFile(loadPath, encoding:NSUTF8StringEncoding, error: &error)
-        
-        // Return status of file save
-        if !text {
-            text = ""
-        }
-        return text!
-    }
-    
-    
-    class func loadStringFromApplicationSupportDirectory(path:String, subdirectory:String) -> String {
-        
-        var newPath = self.stripSlashIfNeeded(path)
-        var newSubdirectory:String? = self.stripSlashIfNeeded(subdirectory)
-        
-        // Create generic beginning to file save path
-        var loadPath = self.applicationSupportDirectory().path+"/"
-        
-        if newSubdirectory {
-            loadPath += newSubdirectory!
-            self.createSubDirectory(loadPath)
-            loadPath += "/"
-        }
         
         // Add requested save path
         loadPath += newPath
+        
         var error:NSError?
         println(loadPath)
         // Save the file and see if it was successful
-        var text:String? = String.stringWithContentsOfFile(loadPath, encoding:NSUTF8StringEncoding, error: &error)
+        var text:String? = String(contentsOfFile:loadPath, encoding:encoding, error: &error)
         
-        // Return status of file save
-        if !text {
-            text = ""
-        }
-        return text!
+        
+        return text
+        
     }
     
-    
+       
     
     // private methods
     
     //directories
-    
-    class func applicationDocumentsDirectory() -> NSURL {
+    private static func applicationDirectory(directory:NSSearchPathDirectory) -> NSURL? {
         
-        var documentsDirectory:String?
-        var paths:AnyObject[] = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true);
+        var appDirectory:String?
+        var paths:[AnyObject] = NSSearchPathForDirectoriesInDomains(directory, NSSearchPathDomainMask.UserDomainMask, true);
         if paths.count > 0 {
-            if let pathString = paths[0] as? NSString {
-                documentsDirectory = pathString
+            if let pathString = paths[0] as? String {
+                appDirectory = pathString
             }
         }
-        
-        return NSURL.URLWithString(documentsDirectory)
-    }
-    
-    class func applicationLibraryDirectory() -> NSURL {
-        var libraryDirectory:String?
-        var paths:AnyObject[] = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.LibraryDirectory, NSSearchPathDomainMask.UserDomainMask, true);
-        if paths.count > 0 {
-            if let pathString = paths[0] as? NSString {
-                libraryDirectory = pathString
-            }
+        if let dD = appDirectory {
+            return NSURL(string:dD)
         }
-        return NSURL.URLWithString(libraryDirectory)
+        return nil
     }
     
-    class func applicationSupportDirectory() -> NSURL {
-        var applicationSupportDirectory:String?
-        var paths:AnyObject[] = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.ApplicationSupportDirectory, NSSearchPathDomainMask.UserDomainMask, true);
-        if paths.count > 0 {
-            if let pathString = paths[0] as? NSString {
-                applicationSupportDirectory = pathString
-            }
+    
+    
+    
+    private static func applicationTemporaryDirectory() -> NSURL? {
+        
+        if let tD = NSTemporaryDirectory() {
+            return NSURL(string:tD)
         }
-        return NSURL.URLWithString(applicationSupportDirectory)
-    }
-    
-    
-    
-    
-    
-    class func applicationTemporaryDirectory() -> NSURL {
         
-        var temporaryDirectory:String? = NSTemporaryDirectory();
-        
-        return NSURL.URLWithString(temporaryDirectory)
+        return nil
         
     }
-    class func applicationCachesDirectory() -> NSURL {
-        
-        var cachesDirectory:String?
-        
-        var paths = NSSearchPathForDirectoriesInDomains(.ApplicationSupportDirectory,.UserDomainMask, true);
-        
-        if paths.count > 0 {
-            if let pathString = paths[0] as? NSString {
-                cachesDirectory = pathString
-            }
-        }
-        return NSURL.URLWithString(cachesDirectory);
-    }
+    
     //pragma mark - strip slashes
     
-    class func stripSlashIfNeeded(stringWithPossibleSlash:String) -> String {
+    private static func stripSlashIfNeeded(stringWithPossibleSlash:String) -> String {
         var stringWithoutSlash:String = stringWithPossibleSlash
         // If the file name contains a slash at the beginning then we remove so that we don't end up with two
         if stringWithPossibleSlash.hasPrefix("/") {
-            stringWithoutSlash = stringWithPossibleSlash.substringFromIndex(1)
+            stringWithoutSlash = stringWithPossibleSlash.substringFromIndex(advance(stringWithoutSlash.startIndex,1))
         }
         // Return the string with no slash at the beginning
         return stringWithoutSlash
     }
     
-    class func createSubDirectory(subdirectoryPath:NSString) -> Bool {
-        var error:NSError?
-        var isDir:ObjCBool=false;
-        var exists:Bool = NSFileManager.defaultManager().fileExistsAtPath(subdirectoryPath, isDirectory:&isDir)
-        if (exists) {
-            /* a file of the same name exists, we don't care about this so won't do anything */
-            if isDir==true {
-                /* subdirectory already exists, don't create it again */
-                return true;
-            }
-        }
-        var success:Bool = NSFileManager.defaultManager().createDirectoryAtPath(subdirectoryPath, withIntermediateDirectories:true, attributes:nil, error:&error)
-        
-        if error { println(error) }
-        
-        return success;
-    }
+    
+   
 }
