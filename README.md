@@ -1,20 +1,14 @@
 FileLoad
 ========
 
-Simple file load for iOS coded in Swift.
+Simple file load for iOS coded in Swift 1.2 (Xcode 6.3 Beta 4).
 
     // Load data
-    FileLoad.loadDataFromDocumentsDirectory("YourFile.extension", subdirectory:"YourSubDirectory")
-    FileLoad.loadDataFromLibraryDirectory("YourFile.extension", subdirectory:"YourSubDirectory")
-    FileLoad.loadDataFromTemporaryDirectory("YourFile.extension", subdirectory:"YourSubDirectory")
-    FileLoad.loadDataFromCachesDirectory("YourFile.extension", subdirectory:"YourSubDirectory")
-    FileLoad.loadDataFromApplicationSupportDirectory("YourFile.extension", subdirectory:"YourSubDirectory")
+    FileLoad.loadData(path:String, directory:NSSearchPathDirectory, subdirectory:String?) -> NSData?
+    FileLoad.loadDataFromTemporaryDirectory(path:String, subdirectory:String?) -> NSData?
     
     // Load strings
-    FileLoad.loadStringFromDocumentsDirectory("YourFile.extension", subdirectory:"YourSubDirectory")
-    FileLoad.loadStringFromLibraryDirectory("YourFile.extension", subdirectory:"YourSubDirectory")
-    FileLoad.loadStringFromTemporaryDirectory("YourFile.extension", subdirectory:"YourSubDirectory")
-    FileLoad.loadStringFromCachesDirectory("YourFile.extension", subdirectory:"YourSubDirectory")
-    FileLoad.loadStringFromApplicationSupportDirectory("YourFile.extension", subdirectory:"YourSubDirectory")
-  
+    FileLoad.loadString(path:String, directory:NSSearchPathDirectory, subdirectory:String?, encoding enc:NSStringEncoding = NSUTF8StringEncoding) -> String?
+    FileLoad.loadStringFromTemporaryDirectory(path:String, subdirectory:String?, encoding enc:NSStringEncoding = NSUTF8StringEncoding) -> String?
+
 See also [FileSave](https://github.com/sketchytech/FileSave) and [FileDelete](https://github.com/sketchytech/FileDelete)
