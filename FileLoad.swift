@@ -84,7 +84,7 @@ struct FileLoad {
     
     // string methods
     
-    static func loadString(path:String, directory:NSSearchPathDirectory, subdirectory:String?, encoding:NSStringEncoding = NSUTF8StringEncoding) -> String?
+    static func loadString(path:String, directory:NSSearchPathDirectory, subdirectory:String?, encoding enc:NSStringEncoding = NSUTF8StringEncoding) -> String?
     {
         // Remove unnecessary slash if need
         let newPath = stripSlashIfNeeded(path)
@@ -113,7 +113,7 @@ struct FileLoad {
         var error:NSError?
         println(loadPath)
         // Save the file and see if it was successful
-        var text:String? = String(contentsOfFile:loadPath, encoding:encoding, error: &error)
+        let text:String? = String(contentsOfFile:loadPath, encoding:enc, error: &error)
         
         
         return text
@@ -121,7 +121,7 @@ struct FileLoad {
     }
     
    
-    static func loadStringFromTemporaryDirectory(path:String, subdirectory:String?, encoding:NSStringEncoding = NSUTF8StringEncoding) -> String? {
+    static func loadStringFromTemporaryDirectory(path:String, subdirectory:String?, encoding enc:NSStringEncoding = NSUTF8StringEncoding) -> String? {
         
         // Remove unnecessary slash if need
         let newPath = stripSlashIfNeeded(path)
@@ -150,7 +150,7 @@ struct FileLoad {
         var error:NSError?
         println(loadPath)
         // Save the file and see if it was successful
-        var text:String? = String(contentsOfFile:loadPath, encoding:encoding, error: &error)
+        var text:String? = String(contentsOfFile:loadPath, encoding:enc, error: &error)
         
         
         return text
