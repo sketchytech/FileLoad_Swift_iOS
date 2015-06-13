@@ -1,6 +1,6 @@
 FileLoad
 ========
-Note: It is recommended that you use [SwiftFiles](https://github.com/sketchytech/SwiftFiles), which combines FileLoad with FileDelete and FileSave.
+Note: It is recommended that you use [SwiftFiles](https://github.com/sketchytech/SwiftFiles), which combines FileLoad with FileDelete and FileSave. (SwiftFiles has a [Swift 2 compatible branch](https://github.com/sketchytech/SwiftFiles/tree/Swift_2).)
 
 Simple file load for iOS coded in Swift 1.2 (Xcode 6.3 Beta 4).
 
